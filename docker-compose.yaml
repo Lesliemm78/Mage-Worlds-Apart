@@ -1,0 +1,17 @@
+version: "3.8"
+
+services:
+  db:
+    image: postgres:13
+    container_name: postgres_db
+    environment:
+      POSTGRES_USER: app
+      POSTGRES_PASSWORD: Fishes
+      POSTGRES_DB: Mage_Wiki
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:
