@@ -14,8 +14,95 @@ datasource db {
 }
 
 model User {
-  id       Int    @id @default(autoincrement())
-  email    String @unique
-  name     String
-  password String
+  id         Int         @id @default(autoincrement())
+  email      String      @unique
+  name       String
+  password   String
+  characters Character[]
+}
+
+model Character {
+  id           Int                 @id @default(autoincrement())
+  name         String
+  player       Int?
+  age          String?
+  pronouns     String?
+  gender       String?
+  birthday     String?
+  address      String?
+  hometown     String?
+  approach     String?
+  spheres      String?
+  incomeSource String?
+  background   String?
+  imageurl     String?
+  description  String?
+  npc          NonPlayerCharacter?
+  user         User?               @relation(fields: [player], references: [id])
+}
+
+model NonPlayerCharacter {
+  characterId  Int       @id
+  character    Character @relation(fields: [characterId], references: [id])
+  attitudeTo   String?
+  attitudeFrom String?
+}
+
+model Location {
+  id          Int     @id @default(autoincrement())
+  latlong     String
+  imageurl    String?
+  description String?
+}
+
+model Wonder {
+  id           Int      @id @default(autoincrement())
+  description  String?
+  spheres      String
+  arete        Int
+  rank         Int
+  type         String
+  system       String
+  // background   String
+  cost         String?
+  quintessence Int
+  effects      Effect[] 
+}
+
+model Effect {
+  id               Int               @id @default(autoincrement())
+  description      String?
+  requiredSpheres  RequiredSpheres[]
+  quintessenceCost Int
+  willpowerCost    Int
+  Wonder           Wonder?           @relation(fields: [wonderId], references: [id])
+  wonderId         Int?
+}
+
+enum Sphere {
+  Correspondence
+  Entropy
+  Forces
+  Life
+  Matter
+  Mind
+  Prime
+  Spirit
+  Time
+}
+
+enum Background {
+  Wonder
+  Arcane
+  Avatar
+  // ...
+}
+
+model RequiredSpheres {
+  effectId Int
+  sphere   Sphere
+  rank     Int
+  effect   Effect @relation(fields: [effectId], references: [id])
+
+  @@id([effectId, sphere])
 }
